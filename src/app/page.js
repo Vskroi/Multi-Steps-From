@@ -1,6 +1,6 @@
 "use client";
 
-import { StepOne } from "@/components/step1";
+import { StepOne } from "@/components/stepOne";
 import { useState } from "react";
 import { StepTwo } from "@/components/StepTwo";
 import { StepThree } from "@/components/three";

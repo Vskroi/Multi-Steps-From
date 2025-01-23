@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Input } from "./input";
 export const StepOne = ({ setStep }) => {
   const [formValue, setFormValue] = useState({});
-  const [errors, setError] = useState({});
+  const [errors, setError] = useState({}) 
 
   const onSubmit = () => {
     let nextStep = false;
 
-    console.log(formValue);
+
 
     if (!formValue.firstName || formValue.firstName.length === 0) {
       setError((prev) => ({
@@ -16,17 +16,15 @@ export const StepOne = ({ setStep }) => {
       }));
       nextStep = false;
     } else {
-      setError((prev) => ({ ...prev, firstName: "" }));
       nextStep = true;
     }
-    if (!formValue.lastName || formValue.lastName.length ) {
+    if (!formValue.lastName || formValue.lastName.length === 0) {
       setError((prev) => ({
         ...prev,
         lastName: "Овгоо оруулна уу..",
       }));
       nextStep = false;
     } else {
-      setError((prev) => ({ ...prev, lastName: "" }));
       nextStep = true;
     }
     if (!formValue.userName || formValue.userName.length === 0) {
@@ -36,22 +34,45 @@ export const StepOne = ({ setStep }) => {
       }));
       nextStep = false;
     } else {
-      setError((prev) => ({ ...prev, userName: "" }));
       nextStep = true;
     }
-    if(nextStep){
-      setStep(2)
+    const data  = [ formValue.firstName,  formValue.lastName,  formValue.userName]
+   JSON.stringify(data)
+
+    if (nextStep) {
+      setStep(2);
     }
   };
 
-  console.log(errors);
-  const onFirstNameChange = (e) =>
-    setFormValue({ ...formValue, firstName: e.target.value });
-  const onLastNameChange = (e) =>
-    setFormValue({ ...formValue, lastName: e.target.value });
-  const onUserNameChange = (e) =>
-    setFormValue({ ...formValue, userName: e.target.value });
 
+  const onFirstNameChange = (e) => {
+    setFormValue({ ...formValue, firstName: e.target.value });
+    if (!formValue.firstName || !formValue.firstName.length === 0) {
+      setError((prev) => ({
+        ...prev,
+        firstName: "",
+      }));
+    }
+  };
+  const onLastNameChange = (e) => {
+    setFormValue({ ...formValue, lastName: e.target.value });
+    if (!formValue.lastName || !formValue.lastName.length === 0) {
+      setError((prev) => ({
+        ...prev,
+        lastName: "",
+      }));
+    }
+  };
+  const onUserNameChange = (e) => {
+    setFormValue({ ...formValue, userName: e.target.value });
+    if (!formValue.userName || !formValue.userName.length === 0) {
+      setError((prev) => ({
+        ...prev,
+        userName: "",
+      }));
+     
+    }
+  };
   return (
     <>
       <div className="w-[480px] h-[655px] p-8 bg-white  rounded-lg flex-col justify-between items-start inline-flex">
@@ -71,19 +92,31 @@ export const StepOne = ({ setStep }) => {
               text="First Name"
               onChange={onFirstNameChange}
               min="2007-1-22"
+             
+              
             />
             {errors.firstName ? (
               <p className="text-[#e14942]">{errors.firstName}</p>
             ) : (
               <></>
             )}
-            <Input id="userName" text="Last Name" onChange={onLastNameChange} />
+            <Input 
+            id="userName" 
+            text="Last Name" 
+            onChange={onLastNameChange}
+           
+            />
             {errors.lastName ? (
               <p className="text-[#e14942]">{errors.lastName}</p>
             ) : (
               <></>
             )}
-            <Input id="userName" text="Username" onChange={onUserNameChange} />
+            <Input 
+            id="userName" 
+            text="Username" 
+            onChange={onUserNameChange} 
+        
+            />
             {errors.userName ? (
               <p className="text-[#e14942]">{errors.userName}</p>
             ) : (
