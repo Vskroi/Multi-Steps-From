@@ -8,9 +8,17 @@ export const StepThree = ({ setStep }) => {
 
   const onSubmit = () => {
     let nextStep = false;
-    const date = new Date(formValue.date);
-    const minDate = new Date("2007-01-01");
-    console.log(formValue.date);
+    const date = formValue.date;
+    const curDate = new Date();
+const year = curDate.getFullYear()
+const month = curDate.getMonth()
+const day = curDate.getDate()
+const minDate = [year-18, month+1, day ].join('-')
+const maxDate = [year, month+1, day ].join('-')
+console.log(minDate)
+
+  
+    console.log(date);
 
     if (!formValue.date) {
       setError((prev) => ({
@@ -18,13 +26,22 @@ export const StepThree = ({ setStep }) => {
         date: "Төрсөн өдрөө оруулна уу.",
       }));
       nextStep = false;
-    } else if (date > minDate) {
+    }else if (date > maxDate){
+      setError((prev) => ({
+        ...prev,
+        date: "Төрсөн өдөр одоогийн огнооноос өмнө байх ёстой.",
+      }));
+      nextStep = false;
+    }
+    else if (date > minDate) {
       setError((prev) => ({
         ...prev,
         date: "Та 18 ба түүнээс дээш настай байх ёстой.",
       }));
       nextStep = false;
-    } else {
+   
+    }
+     else {
       setError((prev) => ({ ...prev, date: "" }));
       nextStep = true;
     }
@@ -46,13 +63,19 @@ export const StepThree = ({ setStep }) => {
     setStep(2);
   };
 
-  const ondateChange = (e) =>
+  const ondateChange = (e) =>{
     setFormValue({ ...formValue, date: e.target.value });
-
+    
+  }
   const imageOnchange = (e) => {
-    setFormValue({ ...formValue, profilePicture: e.target.files[0] });
-  
+   const file =  e.target.files[0] 
+    var reader = new FileReader ();
+reader.onloadend = function () {
+setFormValue((prev) => ({ ...prev, profilePicture: reader.result }));
+}
+reader.readAsDataURL(file);
   };
+
   const close = () => {
     setFormValue({ ...formValue, profilePicture: null })
   
@@ -95,7 +118,7 @@ export const StepThree = ({ setStep }) => {
                 <div className="relative w-full h-[230px] flex-col justify-center items-center inline-flex h-[180px] w-[416px]  bg-[#7e7e7f]/5 rounded-lg flex-col justify-center items-center gap-2 inline-flex overflow-hidden">
                 <img
               
-                  src={URL.createObjectURL(formValue.profilePicture)}
+                  src={formValue.profilePicture }
                 />
   <button
     onClick={close} 
@@ -116,6 +139,7 @@ export const StepThree = ({ setStep }) => {
                 type="file"
                 className="invisible"
                 name="profileImage"
+                accept="image/*"
               />
                   <img
                   className="h-[32px] w-[32px] p-2 bg-white rounded-full justify-start items-center gap-2.5 inline-flex"

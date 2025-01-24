@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "./input";
 import { Button } from "./Button";
 export const StepTwo = ({ setStep }) => {
   const [formValue, setFormValue] = useState({});
   const [errors, setError] = useState({});
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("stepTwo");
+
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setFormValue(parsedData);
+    }
+  }, []);
+
   const onSubmit = () => {
     let nextStep = false;
     const checkEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,7 +40,11 @@ export const StepTwo = ({ setStep }) => {
         phoneNumber: "Утасны дугаараа оруулна уу.",
       }));
       nextStep = false;
-    } else if (!formValue.phoneNumber || formValue.phoneNumber.length < 8 || formValue.phoneNumber.length > 8 ) {
+    } else if (
+      !formValue.phoneNumber ||
+      formValue.phoneNumber.length < 8 ||
+      formValue.phoneNumber.length > 8
+    ) {
       setError((prev) => ({
         ...prev,
         phoneNumber: "8 оронтой дугаар оруулна уу.",
@@ -78,25 +92,25 @@ export const StepTwo = ({ setStep }) => {
     if (nextStep) {
       setStep(3);
     }
+    const formData = {
+      email: formValue.email,
+      phoneNumber: formValue.phoneNumber,
+      Password: formValue.Password,
+      confirmPassword: formValue.confirmPassword,
+    };
+    const jsonData = JSON.stringify(formData);
+    localStorage.setItem("stepTwo", jsonData);
+    console.log("Form Data (JSON):", jsonData);
   };
   const backStep = () => {
     setStep(1);
   };
 
   const onEmailChange = (e) => {
-    const checkEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setFormValue({ ...formValue, email: e.target.value });
-
-    if (checkEmail.test(formValue.email)) {
-      setError((prev) => ({
-        ...prev,
-        email: "",
-      }));
-    }
   };
   const onPhoneNumberChange = (e) => {
     setFormValue({ ...formValue, phoneNumber: e.target.value });
-   
   };
   const onPasswordChange = (e) => {
     setFormValue({ ...formValue, Password: e.target.value });
@@ -125,6 +139,7 @@ export const StepTwo = ({ setStep }) => {
                 text="Email"
                 onChange={onEmailChange}
                 type="email"
+                value={formValue.email}
               />
               {errors.email ? (
                 <p className="text-[#e14942]">{errors.email}</p>
@@ -138,6 +153,7 @@ export const StepTwo = ({ setStep }) => {
                 id="phoneNumber"
                 text="Phone number"
                 onChange={onPhoneNumberChange}
+                value={formValue.phoneNumber}
               />
               {errors.phoneNumber ? (
                 <p className="text-[#e14942]">{errors.phoneNumber}</p>
@@ -151,6 +167,7 @@ export const StepTwo = ({ setStep }) => {
                 type="password"
                 text="Password"
                 onChange={onPasswordChange}
+                value={formValue.Password}
               />
               {errors.Password ? (
                 <p className="text-[#e14942]">{errors.Password}</p>
@@ -165,6 +182,7 @@ export const StepTwo = ({ setStep }) => {
                 id="confirmPassword"
                 text="Confirm password"
                 onChange={onconfirmPasswordChange}
+                value={formValue.confirmPassword}
               />
               {errors.confirmPassword ? (
                 <p className="text-[#e14942]">{errors.confirmPassword}</p>

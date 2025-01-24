@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { Input } from "./input";
-export const StepOne = ({ setStep }) => {
-  const [formValue, setFormValue] = useState({});
+import { CardHeader } from "./cardHeader";
+
+import { motion } from "framer-motion";
+
+export const StepOne = ({ setStep }, ) => {
+
+  const [formValue, setFormValue] = useState({
+
+  });
   const [errors, setError] = useState({}) 
 
+  useEffect(() => {
+    const storedData = localStorage.getItem("stepOne");
+    if (storedData) {
+      const parsedData = JSON.parse( storedData);
+      setFormValue(parsedData);
+    }
+  }, []);
+
+  
   const onSubmit = () => {
     let nextStep = false;
-
-
-
     if (!formValue.firstName || formValue.firstName.length === 0) {
       setError((prev) => ({
         ...prev,
@@ -36,63 +49,67 @@ export const StepOne = ({ setStep }) => {
     } else {
       nextStep = true;
     }
-    const data  = [ formValue.firstName,  formValue.lastName,  formValue.userName]
-   JSON.stringify(data)
+    const formData = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      userName: formValue.userName
+    };
+    const jsonData = JSON.stringify(formData);
+    localStorage.setItem("stepOne", jsonData);
+    console.log("Form Data (JSON):", jsonData);
+
 
     if (nextStep) {
+     
       setStep(2);
     }
+
   };
 
 
   const onFirstNameChange = (e) => {
     setFormValue({ ...formValue, firstName: e.target.value });
-    if (!formValue.firstName || !formValue.firstName.length === 0) {
+  
       setError((prev) => ({
         ...prev,
         firstName: "",
       }));
-    }
+   
   };
   const onLastNameChange = (e) => {
     setFormValue({ ...formValue, lastName: e.target.value });
-    if (!formValue.lastName || !formValue.lastName.length === 0) {
+
       setError((prev) => ({
         ...prev,
         lastName: "",
       }));
-    }
+  
   };
   const onUserNameChange = (e) => {
     setFormValue({ ...formValue, userName: e.target.value });
-    if (!formValue.userName || !formValue.userName.length === 0) {
+
       setError((prev) => ({
         ...prev,
         userName: "",
       }));
-     
-    }
   };
+  const transition = {
+    duration: 0.8,
+  
+    ease: [0, 0.71, 0.2, 1.01],
+  }
   return (
     <>
-      <div className="w-[480px] h-[655px] p-8 bg-white  rounded-lg flex-col justify-between items-start inline-flex">
+      < motion.div  animate={{ x: [0, -20, 0] }} transition={transition} className="w-[480px] h-[655px] p-8 bg-white  rounded-lg flex-col justify-between items-start inline-flex">
         <div className="flex-col justify-start items-start  flex">
-          <div className="h-[129px] flex-col justify-start items-start gap-2 flex">
-            <img className="w-[60px] h-[60px]" src="main.png" />
-            <div className="self-stretch text-[#202124] text-[26px] font-semibold">
-              Join Us! 😎
-            </div>
-            <div className="text-center text-[#8d8d8d] text-lg font-normal">
-              Please provide all current information accurately.
-            </div>
-          </div>
+         <CardHeader />
           <div className="w-[416px] h-[228px] flex-col justify-start items-start gap-3 inline-flex mt-10">
             <Input
               id="firstName"
               text="First Name"
               onChange={onFirstNameChange}
               min="2007-1-22"
-             
+              value={formValue.firstName || ""}
               
             />
             {errors.firstName ? (
@@ -104,7 +121,7 @@ export const StepOne = ({ setStep }) => {
             id="userName" 
             text="Last Name" 
             onChange={onLastNameChange}
-           
+            value={formValue.lastName || ""}
             />
             {errors.lastName ? (
               <p className="text-[#e14942]">{errors.lastName}</p>
@@ -115,7 +132,7 @@ export const StepOne = ({ setStep }) => {
             id="userName" 
             text="Username" 
             onChange={onUserNameChange} 
-        
+            value={formValue.userName || ""}
             />
             {errors.userName ? (
               <p className="text-[#e14942]">{errors.userName}</p>
@@ -131,7 +148,7 @@ export const StepOne = ({ setStep }) => {
         >
           Continue 1/3
         </button>
-      </div>
+      </motion.div>
     </>
   );
 };
