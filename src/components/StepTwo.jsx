@@ -6,12 +6,13 @@ export const StepTwo = ({ setStep }) => {
   const [errors, setError] = useState({});
 
   useEffect(() => {
+    if(typeof window !== 'undefined'){
     const storedData = localStorage.getItem("stepTwo");
 
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setFormValue(parsedData);
-    }
+    }}
   }, []);
 
   const onSubmit = () => {
@@ -92,6 +93,7 @@ export const StepTwo = ({ setStep }) => {
     if (nextStep) {
       setStep(3);
     }
+    if(typeof window !== 'undefined'){
     const formData = {
       email: formValue.email,
       phoneNumber: formValue.phoneNumber,
@@ -101,7 +103,7 @@ export const StepTwo = ({ setStep }) => {
     const jsonData = JSON.stringify(formData);
     localStorage.setItem("stepTwo", jsonData);
     console.log("Form Data (JSON):", jsonData);
-  };
+  };}
   const backStep = () => {
     setStep(1);
   };
