@@ -24,7 +24,7 @@ useEffect(()=> {
   return (
     <div className="w-screen h-screen flex-col justify-center items-center inline-flex">
       {step === 1 && <StepOne setStep={setStep} />}
-      {step === 2 && <StepThree setStep={setStep} />}
+      {step === 2 && <StepTwo setStep={setStep} />}
       {step === 3 && <StepThree setStep={setStep} />}
       {step === 4 && <StepFour setStep={setStep} />}
     </div>
