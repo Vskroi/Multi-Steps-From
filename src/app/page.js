@@ -6,9 +6,7 @@ import { StepTwo } from "@/components/StepTwo";
 import { StepThree } from "@/components/three";
 import { StepFour } from "@/components/StepFour";
 export default function Home() {
-  const [step, setStep] = useState(() => {
-    if(typeof window !== 'undefined'){localStorage.getItem("page") == null && 1}
-  }
+  const [step, setStep] = useState(1
 );
   useEffect(() => {
     if(typeof window !== 'undefined'){
